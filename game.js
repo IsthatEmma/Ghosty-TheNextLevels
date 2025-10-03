@@ -1,48 +1,20 @@
 // A starter template for side-scrolling games like our platformer
 kaboom({
- width: 1400,
- height: 800,
- background: [0, 100, 200],
+    width: 1400,
+    height: 800,
+    background: [0, 100, 200],
 });
 
 setGravity(800);
 
-// Load a player sprite
+// Loading sprites
 loadSprite("ghosty", "https://kaboomjs.com/sprites/ghosty.png");
 loadSprite("enemy", "https://kaboomjs.com/sprites/mushroom.png");
 loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
 loadSprite("door", "https://kaboomjs.com/sprites/door.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 
-// --- The Player Character ---
-const player = add([
- sprite("ghosty"),
- pos(100, 100),
- area({ scale: 0.7 }),
- body(),
-]);
-
-// --- The World ---
-add([
- rect(width(), 48),
- pos(0, height() - 48),
- area(),
- body({ isStatic: true }),
-]);
-
-// --- Movement Controls ---
-onKeyDown("left", () => {
- player.move(-200, 0);
-});
-onKeyDown("right", () => {
- player.move(200, 0);
-});
-onKeyPress("space", () => {
- if (player.isGrounded()) {
- player.jump(650);
- }
-});
-
+// --- Enemy patrol component ---
 function patrol() {
     return {
         id: "patrol",
@@ -61,97 +33,143 @@ function patrol() {
     };
 }
 
-// The Main Game Scene wowzersss 
+
+
 scene("main", ({ level } = { level: 0 }) => {
-   // the levels
-   const LEVELS = [
-       [
-           "                    ",
-           "                    ",
-           "    =     $    =   D ",
-           "    $           $     ",
-           "  =    ^  =      =  ",
-           " $                 ",
-           "====================",
-       ],
-       [
-           "                  D ",
-           "         =           ",
-           "    =         =   = ",
-           "  $         $  $       ",
-           "  =    ^  =      =  ",
-           "         $          ",
-           "====================",
-       ],
-       [
-           "                   ",
-           "                    ",
-           "    =         =    ",
-           "                    ",
-           "  =    ^  =      =  ",
-           " $           $     D ",
-           "====================",
-       ],
-       [
-           "   $            $    ",
-           "         =           ",
-           "    =         =   D ",
-           "                    ",
-           "  =    ^  =   =   =  ",
-           " $                  ",
-           "====================",
-       ],
-       [
-           "                   D ",
-           "     $       $    =    ",
-           "    =         =     ",
-           "                    ",
-           "  =    ^  =      =  ",
-           " $                ",
-           "====================",
-       ]
-   ];
-   const currentLevel = level;
+
+    const LEVELS = [
+        [
+            "                    ",
+            "                    ",
+            "    =     $    =   D ",
+            "    $           $     ",
+            "  =    ^  =      =  ",
+            " $                 ",
+            "====================",
+        ],
+        [
+            "                  D ",
+            "         =           ",
+            "    =         =   = ",
+            "  $         $  $       ",
+            "  =    ^  =      =  ",
+            "         $          ",
+            "====================",
+        ],
+        [
+            "                   ",
+            "                    ",
+            "    =         =    ",
+            "                    ",
+            "  =    ^  =      =  ",
+            " $           $     D ",
+            "====================",
+        ],
+        [
+            "   $            $    ",
+            "         =           ",
+            "    =         =   D ",
+            "                    ",
+            "  =    ^  =   =   =  ",
+            " $                  ",
+            "====================",
+        ],
+        [
+            "                   D ",
+            "     $       $    =    ",
+            "    =         =     ",
+            "                    ",
+            "  =    ^  =      =  ",
+            " $                ",
+            "====================",
+        ]
+    ];
+
+    const currentLevel = level;
+
    
-   const levelConf = {
-    tileWidth: 47, 
-    titeHeight: 47, 
-    tiles: {
-        " ": () => [],
+    const levelConf = {
+        tileWidth: 47,
+        tileHeight: 47,
+        tiles: {
+            " ": () => [],
             "=": () => [
                 rect(47, 47),
-                color(0, 300, 0),
+                color(0, 200, 0),
                 area(),
                 body({ isStatic: true }),
                 "platform",
             ],
-         "$": () => [
+            "$": () => [
                 sprite("pineapple"),
                 area(),
                 "pineapple",
             ],
-             "D": () => [
+            "D": () => [
                 sprite("door"),
                 area(),
-                "door", 
-
+                "door",
             ],
-
-             "^": () => [
+            "^": () => [
                 sprite("enemy"),
                 area(),
                 body(),
                 patrol(),
                 "enemy",
             ],
-        }
+        },
     };
 
-    addLevel(LEVELS[currentLevel], levelconf);
+    addLevel(LEVELS[currentLevel], levelConf);
 
+ 
     let score = 0;
     const scoreLabel = add([
-        text("pineapple:" + score),
-        pos(24,24),
+        text("pineapple: " + score),
+        pos(24, 24),
         fixed(),
     ]);
+
+   
+    const player = add([
+        sprite("ghosty"),
+        pos(100, 100),
+        area({ scale: 0.7 }),
+        body(),
+        "player",
+    ]);
+
+    // Movement
+    onKeyDown("left", () => { player.move(-200, 0); });
+    onKeyDown("right", () => { player.move(200, 0); });
+    onKeyPress("space", () => { 
+        if (player.isGrounded()) { 
+            player.jump(650);
+        } 
+    });
+
+    // Collecting pineapples
+    player.onCollide("pineapple", (pineapple) => {
+        destroy(pineapple);
+        score += 20;
+        scoreLabel.text = "pineapple: " + score;
+    });
+
+    player.onCollide("enemy", (enemy, col) => {
+        if (col.isBottom()) {
+            destroy(enemy);
+            player.jump(300);
+        } else {
+            destroy(player);
+            go("lose");
+        }
+    });
+
+    player.onCollide("door", () => {
+        if (currentLevel + 1 < LEVELS.length) {
+            go("main", { level: currentLevel + 1 });
+        } else {
+            go("win");
+        }
+    });
+});
