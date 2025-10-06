@@ -16,6 +16,7 @@ loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
 loadSprite("door", "https://kaboomjs.com/sprites/door.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
+// loadSprite("grass", "https://kaboomjs.com/sprites/grass.png");
 
 // --- Enemy patrol component ---
 function patrol() {
@@ -40,6 +41,13 @@ function patrol() {
 
 scene("main", ({ level } = { level: 0 }) => {
 
+    add([
+        sprite("sun"),
+        pos(1200, -2),
+        scale(3),
+        "sun"
+         ]);
+    
     add([
         sprite("cloud"),
         pos(300, -1),
@@ -70,42 +78,42 @@ scene("main", ({ level } = { level: 0 }) => {
             "  =      =  ^    =    ",
             " $    ^                   D",
             "==============================",
-        ],
+        ], 
         [
-            "         $         D ",
+            "         $          ",
             "         =           ",
             "    =         =     ",
-            "  $               $   ",
+            "  $               $     D",
             "  =      =   ^   =  ",
-            "      ^   $       ^   ",
-            "====================",
+            "    ^     $       ^   ",
+            "===============================",
         ],
         [
-            "                   ",
-            "        =            ",
-            "    =         =    ",
-            "         $           ",
-            "   =    ^  =   ^   =  ",
-            " $    ^      $     D ",
-            "====================",
+            "                         ",
+            "        =                D",
+            "    =         =       ==    ",
+            "         $             $  ",
+            "   =    ^  =   ^   =      ",
+            "            $        ^   ==",
+            "=================================",
         ],
         [
             "                  $    ",
             "    $    =    $       ",
-            "    =         =   D ",
-            "                    ",
+            "    =         =      D ",
+            "                     ",
             "  =    ^  =  ^ =   =  ",
-            " $               ^   ",
-            "====================",
+            " $                  ^ = ",
+            "==================================",
         ],
         [
-            "                   D ",
+            "                      D ",
             "     $       $    =    ",
-            "    =         =     ",
-            "                  $  ",
-            "  =    ^  =   ^   =  ",
-            " $        ^        ",
-            "====================",
+            "    =         =        ",
+            "                  $     ",
+            "  =    ^  =   ^   =    ",
+            " $        ^            =",
+            "==================================",
         ]
     ];
 
