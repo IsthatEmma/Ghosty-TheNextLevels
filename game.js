@@ -2,8 +2,10 @@
 kaboom({
     width: 1400,
     height: 800,
-    background: [0, 100, 200],
+    background: [116, 71, 0],
 });
+
+
 
 setGravity(800);
 
@@ -13,6 +15,7 @@ loadSprite("enemy", "https://kaboomjs.com/sprites/mushroom.png");
 loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
 loadSprite("door", "https://kaboomjs.com/sprites/door.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
+loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
 
 // --- Enemy patrol component ---
 function patrol() {
@@ -37,50 +40,71 @@ function patrol() {
 
 scene("main", ({ level } = { level: 0 }) => {
 
+    add([
+        sprite("cloud"),
+        pos(300, -1),
+        scale(2),
+        "cloud"
+         ]);
+
+    add([
+        sprite("cloud"),
+        pos(600, -1),
+        scale(2),
+        "cloud"
+         ]);
+
+    add([
+        sprite("cloud"),
+        pos(900, -1),
+        scale(2),
+        "cloud"
+         ]);
+
     const LEVELS = [
         [
             "                    ",
-            "                    ",
-            "    =     $    =   D ",
-            "    $           $     ",
-            "  =    ^  =      =  ",
-            " $                 ",
-            "====================",
+            "    $                ",
+            "    =     $    =    $ ",
+            "                 $ =   = ",
+            "  =      =  ^    =    ",
+            " $    ^                   D",
+            "==============================",
         ],
         [
-            "                  D ",
+            "         $         D ",
             "         =           ",
-            "    =         =   = ",
-            "  $         $  $       ",
-            "  =    ^  =      =  ",
-            "         $          ",
+            "    =         =     ",
+            "  $               $   ",
+            "  =      =   ^   =  ",
+            "      ^   $       ^   ",
             "====================",
         ],
         [
             "                   ",
-            "                    ",
+            "        =            ",
             "    =         =    ",
-            "                    ",
-            "  =    ^  =      =  ",
-            " $           $     D ",
+            "         $           ",
+            "   =    ^  =   ^   =  ",
+            " $    ^      $     D ",
             "====================",
         ],
         [
-            "   $            $    ",
-            "         =           ",
+            "                  $    ",
+            "    $    =    $       ",
             "    =         =   D ",
             "                    ",
-            "  =    ^  =   =   =  ",
-            " $                  ",
+            "  =    ^  =  ^ =   =  ",
+            " $               ^   ",
             "====================",
         ],
         [
             "                   D ",
             "     $       $    =    ",
             "    =         =     ",
-            "                    ",
-            "  =    ^  =      =  ",
-            " $                ",
+            "                  $  ",
+            "  =    ^  =   ^   =  ",
+            " $        ^        ",
             "====================",
         ]
     ];
@@ -95,7 +119,7 @@ scene("main", ({ level } = { level: 0 }) => {
             " ": () => [],
             "=": () => [
                 rect(47, 47),
-                color(0, 200, 0),
+                color(244, 67, 54),
                 area(),
                 body({ isStatic: true }),
                 "platform",
@@ -106,7 +130,7 @@ scene("main", ({ level } = { level: 0 }) => {
                 "pineapple",
             ],
             "D": () => [
-                sprite("door"),
+                sprite("door"), 
                 area(),
                 "door",
             ],
@@ -173,3 +197,18 @@ scene("main", ({ level } = { level: 0 }) => {
         }
     });
 });
+
+scene("lose", () => {
+    add([ text("Game Over"), pos(center()), anchor("center") ]);
+    wait(2, () => { go("main", { level: 0 }); });
+});
+
+// --- Win Scene ---
+scene("win", () => {
+    add([ text("You Win!"), pos(center()), anchor("center") ]);
+    wait(2, () => { go("main", { level: 0 }); });
+});
+
+
+// Start the game
+go("main");
