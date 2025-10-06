@@ -187,10 +187,19 @@ scene("main", ({ level } = { level: 0 }) => {
         scoreLabel.text = "pineapple: " + score;
     });
 
+loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
+
     player.onCollide("enemy", (enemy, col) => {
         if (col.isBottom()) {
             destroy(enemy);
             player.jump(300);
+
+            add([
+                sprite("boom"),
+                pos(enemy.pos),
+                lifespan(0.5), 
+                scale(1), 
+                ]);
         } else {
             destroy(player);
             go("lose");
