@@ -2,7 +2,8 @@
 kaboom({
     width: 1400,
     height: 800,
-    background: [116, 71, 0],
+    background: [234, 205, 159],
+    // background: [116, 71, 0],
 });
 
 
@@ -16,7 +17,9 @@ loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
 loadSprite("door", "https://kaboomjs.com/sprites/door.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
-// loadSprite("grass", "https://kaboomjs.com/sprites/grass.png");
+loadSprite("backgroundMusic", "");
+const music = play ("backgroundMusic", { loop: true});
+
 
 // --- Enemy patrol component ---
 function patrol() {
@@ -76,7 +79,7 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =     $    =    $ ",
             "                 $ =   = ",
             "  =      =  ^    =    ",
-            " $    ^                   D",
+            " $    ^             ^  =   D",
             "==============================",
         ], 
         [
@@ -85,7 +88,7 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =         =     ",
             "  $               $     D",
             "  =      =   ^   =  ",
-            "    ^     $       ^   ",
+            "    ^     $       ^   =",
             "===============================",
         ],
         [
@@ -94,7 +97,7 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =         =       ==    ",
             "         $             $  ",
             "   =    ^  =   ^   =      ",
-            "            $        ^   ==",
+            "      ^      $        ^   ==",
             "=================================",
         ],
         [
@@ -103,16 +106,16 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =         =      D ",
             "                     ",
             "  =    ^  =  ^ =   =  ",
-            " $                  ^ = ",
+            " $               ^   ^ = ",
             "==================================",
         ],
         [
             "                      D ",
             "     $       $    =    ",
-            "    =         =        ",
+            "  ^  =         =        ",
             "                  $     ",
             "  =    ^  =   ^   =    ",
-            " $        ^            =",
+            " $        ^     ^         ^=",
             "==================================",
         ]
     ];
@@ -127,7 +130,8 @@ scene("main", ({ level } = { level: 0 }) => {
             " ": () => [],
             "=": () => [
                 rect(47, 47),
-                color(244, 67, 54),
+                color(236, 226, 209),
+                outline(3, rgb(0, 0, 0)),
                 area(),
                 body({ isStatic: true }),
                 "platform",
@@ -180,6 +184,7 @@ scene("main", ({ level } = { level: 0 }) => {
         } 
     });
 
+
     // Collecting pineapples
     player.onCollide("pineapple", (pineapple) => {
         destroy(pineapple);
@@ -193,6 +198,7 @@ loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
         if (col.isBottom()) {
             destroy(enemy);
             player.jump(300);
+
 
             add([
                 sprite("boom"),
@@ -225,7 +231,7 @@ scene("win", () => {
     add([ text("You Win!"), pos(center()), anchor("center") ]);
     wait(2, () => { go("main", { level: 0 }); });
 });
-
+''
 
 // Start the game
 go("main");
