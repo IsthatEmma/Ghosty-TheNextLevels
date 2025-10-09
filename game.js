@@ -17,7 +17,7 @@ loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
 loadSprite("door", "https://kaboomjs.com/sprites/door.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
-loadSprite("backgroundMusic", "");
+loadSound("backgroundMusic", "/music.mp3");
 const music = play ("backgroundMusic", { loop: true});
 
 
