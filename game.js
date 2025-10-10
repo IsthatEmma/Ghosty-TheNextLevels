@@ -195,6 +195,7 @@ scene("main", ({ level } = { level: 0 }) => {
         scoreLabel.text = "pineapple: " + score;
     });
 
+loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
 
     player.onCollide("enemy", (enemy, col) => {
         if (col.isBottom()) {
@@ -204,6 +205,7 @@ scene("main", ({ level } = { level: 0 }) => {
 
 
             add([
+                sprite("boom"),
                 pos(enemy.pos),
                 lifespan(0.5), 
                 scale(1), 
