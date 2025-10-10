@@ -17,8 +17,8 @@ loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
 loadSprite("door", "https://kaboomjs.com/sprites/door.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
-loadSound("backgroundMusic", "/music.mp3");
-loadSound("boomMusic", "/music.mp3 ");
+loadSound("backgroundMusic", "/Background.mp3");
+loadSound("boomMusic", "/BoomMusic.mp3 ");
 
 
 const music = play ("backgroundMusic", { loop: true});
@@ -198,12 +198,12 @@ scene("main", ({ level } = { level: 0 }) => {
 
     player.onCollide("enemy", (enemy, col) => {
         if (col.isBottom()) {
+            play("boomMusic");
             destroy(enemy);
             player.jump(300);
 
 
             add([
-                sprite("boom"),
                 pos(enemy.pos),
                 lifespan(0.5), 
                 scale(1), 
