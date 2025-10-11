@@ -1,4 +1,6 @@
 // A starter template for side-scrolling games like our platformer
+
+//Background on the game ! 
 kaboom({
     width: 1400,
     height: 800,
@@ -10,7 +12,7 @@ kaboom({
 
 setGravity(800);
 
-// Loading sprites
+// Loading in my character sprites + features of the background, (sun, cloud, etc.)
 loadSprite("ghosty", "https://kaboomjs.com/sprites/ghosty.png");
 loadSprite("enemy", "https://kaboomjs.com/sprites/mushroom.png");
 loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
@@ -19,8 +21,11 @@ loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
 loadSound("backgroundMusic", "/Background.mp3");
 loadSound("boomMusic", "/BoomMusic.mp3 ");
+loadSound("CoinMusic", "/Coin.mp3");
+loadSound("GameOver", "/GameOver.mp3");
 
 
+// Background music playing (retro arcade music because yes :D ) 
 const music = play ("backgroundMusic", { loop: true});
 
 
@@ -46,7 +51,7 @@ function patrol() {
 
 
 scene("main", ({ level } = { level: 0 }) => {
-
+// Beginning to add sun + clouds.
     add([
         sprite("sun"),
         pos(1200, -2),
@@ -191,6 +196,7 @@ scene("main", ({ level } = { level: 0 }) => {
     // Collecting pineapples
     player.onCollide("pineapple", (pineapple) => {
         destroy(pineapple);
+        play("CoinMusic");
         score += 20;
         scoreLabel.text = "pineapple: " + score;
     });
@@ -212,6 +218,7 @@ loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
                 ]);
         } else {
             destroy(player);
+            play("GameOver");
             go("lose");
         }
     });
@@ -225,17 +232,18 @@ loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
     });
 });
 
-scene("lose", () => {
-    add([ text("Game Over"), pos(center()), anchor("center") ]);
-    wait(2, () => { go("main", { level: 0 }); });
-});
 
 // --- Win Scene ---
 scene("win", () => {
     add([ text("You Win!"), pos(center()), anchor("center") ]);
     wait(2, () => { go("main", { level: 0 }); });
 });
-''
+scene("lose", () => {
+    add([ text("Game Over"), pos(center()), anchor("center") ]);
+    wait(2, () => { go("main", { level: 0 }); });
+});
+
+
 
 // Start the game
 go("main");
