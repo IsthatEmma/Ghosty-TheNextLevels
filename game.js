@@ -12,7 +12,7 @@ kaboom({
 
 setGravity(800);
 
-// Loading in my character sprites + features of the background, (sun, cloud, etc.)
+// Loading in my loadsounds, character sprites + features of the background, (sun, cloud, etc.)
 loadSprite("ghosty", "https://kaboomjs.com/sprites/ghosty.png");
 loadSprite("enemy", "https://kaboomjs.com/sprites/mushroom.png");
 loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
@@ -24,10 +24,9 @@ loadSound("boomMusic", "/BoomMusic.mp3 ");
 loadSound("CoinMusic", "/Coin.mp3");
 loadSound("GameOver", "/GameOver.mp3");
 
+// --- Global background music ---
 
-// Background music playing (retro arcade music because yes :D ) 
-const music = play ("backgroundMusic", { loop: true});
-
+let music = play("backgroundMusic", { loop: true });
 
 // --- Enemy patrol component ---
 function patrol() {
@@ -51,6 +50,7 @@ function patrol() {
 
 
 scene("main", ({ level } = { level: 0 }) => {
+
 // Beginning to add sun + clouds.
     add([
         sprite("sun"),
@@ -114,17 +114,18 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =         =      D ",
             "                     ",
             "  =    ^  =  ^ =   =  ",
-            " $               ^   ^ = ",
+            " $               ^    = ",
             "==================================",
         ],
         [
             "                      D ",
             "     $       $    =    ",
-            "  ^  =         =        ",
+            "    =         =        ",
             "                  $     ",
             "  =    ^  =   ^   =    ",
-            " $        ^     ^         ^=",
+            "         ^     ^         ^=",
             "==================================",
+        
         ]
     ];
 
@@ -201,7 +202,7 @@ scene("main", ({ level } = { level: 0 }) => {
         scoreLabel.text = "pineapple: " + score;
     });
 
-loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
+loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
 
     player.onCollide("enemy", (enemy, col) => {
         if (col.isBottom()) {
@@ -219,18 +220,21 @@ loadSprite("boom", "https://kaboomjs.com/sprites/boom.png");
         } else {
             destroy(player);
             play("GameOver");
-            go("lose");
+            wait(2, () => go("lose"));
         }
     });
 
-    player.onCollide("door", () => {
-        if (currentLevel + 1 < LEVELS.length) {
-            go("main", { level: currentLevel + 1 });
-        } else {
-            go("win");
+player.onCollide("door", () => {
+    const nextLevel = currentLevel + 1;
+    if (nextLevel < LEVELS.length) {
+        go("main", { level: nextLevel });
+    } else {
+        go("win");
         }
     });
 });
+
+
 
 
 // --- Win Scene ---
@@ -240,10 +244,10 @@ scene("win", () => {
 });
 scene("lose", () => {
     add([ text("Game Over"), pos(center()), anchor("center") ]);
-    wait(2, () => { go("main", { level: 0 }); });
+    wait(3, () => { go("main", { level: 0 }); });
 });
 
 
 
-// Start the game
-go("main");
+// --- Start game ---
+go("main", { level: 0 });
