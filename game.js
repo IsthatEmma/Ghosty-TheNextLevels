@@ -16,21 +16,21 @@ setGravity(800);
 loadSprite("ghosty", "https://kaboomjs.com/sprites/ghosty.png");
 loadSprite("enemy", "https://kaboomjs.com/sprites/mushroom.png");
 loadSprite("pineapple", "https://kaboomjs.com/sprites/pineapple.png");
-loadSprite("door", "https://kaboomjs.com/sprites/door.png");
+loadSprite("portal", "https://kaboomjs.com/sprites/portal.png");
 loadSprite("cloud", "https://kaboomjs.com/sprites/cloud.png");
 loadSprite("sun", "https://kaboomjs.com/sprites/sun.png");
 loadSound("backgroundMusic", "/Background.mp3");
 loadSound("boomMusic", "/BoomMusic.mp3 ");
 loadSound("CoinMusic", "/Coin.mp3");
 loadSound("GameOver", "/GameOver.mp3");
+loadSound("VictoryMusic", "/VictoryMusic.mp3");
 loadSprite("lighting", "https://kaboomjs.com/sprites/lightening.png");
 
 
-// --- Global background music ---
-
+// Letting the background Music run constantly, loop = true
 let music = play("backgroundMusic", { loop: true });
 
-// --- Enemy patrol component ---
+// The patrol
 function patrol() {
     return {
         id: "patrol",
@@ -50,10 +50,10 @@ function patrol() {
 }
 
 
-
+// This is my main scene! 
 scene("main", ({ level } = { level: 0 }) => {
 
-// Beginning to add sun + clouds.
+// Beginning to add sprites into the main scene.
     add([
         sprite("sun"),
         pos(1200, -2),
@@ -82,6 +82,7 @@ scene("main", ({ level } = { level: 0 }) => {
         "cloud"
          ]);
 
+    // 5 Different levels! 
     const LEVELS = [
         [
             "                    ",
@@ -153,9 +154,9 @@ scene("main", ({ level } = { level: 0 }) => {
                 "pineapple",
             ],
             "D": () => [
-                sprite("door"), 
+                sprite("portal"), 
                 area(),
-                "door",
+                "portal",
             ],
             "^": () => [
                 sprite("enemy"),
@@ -169,7 +170,7 @@ scene("main", ({ level } = { level: 0 }) => {
 
     addLevel(LEVELS[currentLevel], levelConf);
 
- 
+    // ScoreKeeper
     let score = 0;
     const scoreLabel = add([
         text("pineapple: " + score),
@@ -177,7 +178,7 @@ scene("main", ({ level } = { level: 0 }) => {
         fixed(),
     ]);
 
-   
+   // The Player
     const player = add([
         sprite("ghosty"),
         pos(100, 100),
@@ -186,7 +187,7 @@ scene("main", ({ level } = { level: 0 }) => {
         "player",
     ]);
 
-    // Movement
+    // The Movement + Jumping
     onKeyDown("left", () => { player.move(-200, 0); });
     onKeyDown("right", () => { player.move(200, 0); });
     onKeyPress("space", () => { 
@@ -196,7 +197,7 @@ scene("main", ({ level } = { level: 0 }) => {
     });
 
 
-    // Collecting pineapples
+    // Player collecting pineapples
     player.onCollide("pineapple", (pineapple) => {
         destroy(pineapple);
         play("CoinMusic");
@@ -204,14 +205,18 @@ scene("main", ({ level } = { level: 0 }) => {
         scoreLabel.text = "pineapple: " + score;
     });
 
+    //  Loading in my boom sprite 
 loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
+
 
     player.onCollide("enemy", (enemy, col) => {
     if (col.isBottom()) {
+        // "boomMusic" will be played !
         play("boomMusic");
         destroy(enemy);
         player.jump(300);
 
+        // This will pixelated boom sound effect when the player jumps onto the mushroom
         add([
             sprite("boom"),
             pos(enemy.pos),
@@ -220,9 +225,10 @@ loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
         ]);
     } else {
         destroy(player);
-        play("GameOver", { volume: 3 }); // correct syntax 
+        // This will play a fatality sound effect when the player runs into the enemy "the mushroom"
+        play("GameOver", { volume: 3 }); 
 
-       
+        // When the player dies, a lighting sprite will be shown to show that the player has died
         add([
             sprite("lighting"), 
             pos(enemy.pos),
@@ -230,12 +236,13 @@ loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
             scale(2),
         ]);
 
-        // Wait 2 seconds then go to lose scene
+        // Waiting for 2 seconds only then switching to the lose scene
         wait(2, () => go("lose"));
     }
 });
 
-player.onCollide("door", () => {
+    // Door / portal sprite 
+player.onCollide("portal", () => {
     const nextLevel = currentLevel + 1;
     if (nextLevel < LEVELS.length) {
         go("main", { level: nextLevel });
@@ -248,10 +255,11 @@ player.onCollide("door", () => {
 
 
 
-// --- Win Scene ---
+// The win & lose scene
 scene("win", () => {
+    play("VictoryMusic", { volume: 3 }); 
     add([ text("You Win!"), pos(center()), anchor("center") ]);
-    wait(2, () => { go("main", { level: 0 }); });
+    wait(3.4, () => { go("main", { level: 0 }); });
 
 });
 scene("lose", () => {
@@ -265,9 +273,6 @@ scene("lose", () => {
     add([
         text("(imagine losing lol)", { size: 24 }),
         pos(mid.x, mid.y + line1.height / 2 + 10), 
-
-    // add([ text("Game Over"), pos(center()), anchor("center") ]);
-    // add([ text("(imagine losing lol)"), pos(center().x, center().y + 40), anchor("center") 
     
 ]);
     wait(3, () => { go("main", { level: 0 }); });
@@ -275,5 +280,5 @@ scene("lose", () => {
 
 
 
-// --- Start game ---
+// Starting the Game!
 go("main", { level: 0 });
