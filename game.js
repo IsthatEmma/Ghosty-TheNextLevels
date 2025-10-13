@@ -92,6 +92,14 @@ scene("main", ({ level } = { level: 0 }) => {
             "  =      =  ^    =    ",
             " $    ^             ^  =   D",
             "==============================",
+            "==============================",
+            "==============================",
+            "==============================",
+            "==============================",
+            "==============================",
+            "==============================",
+            "==============================",
+            
         ], 
         [
             "         $          ",
@@ -147,6 +155,7 @@ scene("main", ({ level } = { level: 0 }) => {
                 area(),
                 body({ isStatic: true }),
                 "platform",
+                
             ],
             "$": () => [
                 sprite("pineapple"),
@@ -258,7 +267,7 @@ player.onCollide("portal", () => {
 // The win & lose scene
 scene("win", () => {
     play("VictoryMusic", { volume: 3 }); 
-    add([ text("You Win!"), pos(center()), anchor("center") ]);
+    add([ text("Yippe, You Won :D !"), pos(center()), anchor("center") ]);
     wait(3.4, () => { go("main", { level: 0 }); });
 
 });
