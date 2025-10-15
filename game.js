@@ -26,10 +26,9 @@ loadSound("GameOver", "/GameOver.mp3");
 loadSound("VictoryMusic", "/VictoryMusic.mp3");
 loadSprite("lighting", "https://kaboomjs.com/sprites/lightening.png");
 loadSound("IntroMusic", "IntroMusic.mp3");
+// I used most of these audios from tiktok and converted them into a mp3, 
+// I hope that is okay!
 
-
-// Letting the background Music run constantly, loop = true
-//let music = play("backgroundMusic", { loop: true });
 
 // The patrol section
 function patrol() {
@@ -49,9 +48,10 @@ function patrol() {
         },
     };
 }
+
 // Opening Intro I came up with, 
 // Unfortionately I did not know how to program a opening intro the game,
-// so I asked AI how I could do that
+// so I asked AI how I could do that.
 scene("intro", () => {
     const introSong = play("IntroMusic", { loop: true, volume: 0.8 });
     // A black background as my opening intro to the game! :) 
@@ -71,7 +71,7 @@ wait(0.1, () => {
         anchor("center"),
     ]);
 });
-    // A short description of how to help Ghosty.
+    // A short description of how to help Ghosty!
 wait(1, () => {
     add([
         text("Help Ghosty collect pineapples, avoid mushrooms and reach the portal!", {
@@ -94,15 +94,17 @@ wait(1.8, () => {
         color(255, 242, 204),
     ]);
 
-    // I asked AI to show me how to do a flashing effect when the,
-    // text says "press space to start"
+    // I asked AI to show me how to program a flashing effect when the,
+    // text says "press space to start" on the screen
     loop(0.4, () => {
         startText.hidden = !startText.hidden;
     });
 });
 // Once the player presses the space bar, the game begins immediately 
     onKeyPress("space", () => {
-        // I asked AI how I could stop a intro song so it wont continue forever in the actual game
+
+        // I asked AI how I could program to stop a intro song,
+        //  so it wont continue forever in the actual game
         introSong.stop();
         play("backgroundMusic", { loop: true, volume: 0.8 });
         // Goes to the main scene | starts from the beginning
@@ -197,8 +199,8 @@ scene("main", ({ level } = { level: 0 }) => {
             "     $       $    =    ",
             "    =         =        ",
             "                  $     ",
-            "  =    ^  =   ^   =    ",
-            "         ^     ^         ^=",
+            "  =    ^  =       =    ",
+            "         ^  =   ^   =  ^    ^  =",
             "==============================",
             "==============================",
             "==============================",
@@ -321,6 +323,7 @@ loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
         ]);
 
         // Waiting for 2 seconds only then switching to the lose scene
+        // Almost like a time.sleep function I always like to put in my games.
         wait(2, () => go("lose"));
     }
 });
@@ -384,3 +387,5 @@ scene("lose", () => {
 
 // Starting Ghosty & the next Levels game!
 go("intro");
+// Starting at the intro so the intro opening can play! 
+// I like games that have a cute opening haha.
