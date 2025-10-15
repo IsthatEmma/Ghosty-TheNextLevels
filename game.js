@@ -5,7 +5,7 @@ kaboom({
     width: 1400,
     height: 707,
     background: [234, 205, 159],
-    // background: [116, 71, 0],
+    
 });
 
 
