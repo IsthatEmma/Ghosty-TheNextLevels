@@ -83,7 +83,7 @@ wait(1, () => {
 });
 
 // I created a somewhat fade in text right on beat with the opening song,
-// to give it more a cool intro effect
+// to give it more a cool intro effect, it should be on beat though
 wait(1.8, () => {
     const startText = add([
         text("Press SPACE to Start", {
