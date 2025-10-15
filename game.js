@@ -9,7 +9,7 @@ kaboom({
 });
 
 
-
+// Setting the set Gravity to 800
 setGravity(800);
 
 // Loading in my loadsounds, character sprites + features of the background, (sun, cloud, etc.)
@@ -25,12 +25,13 @@ loadSound("CoinMusic", "/Coin.mp3");
 loadSound("GameOver", "/GameOver.mp3");
 loadSound("VictoryMusic", "/VictoryMusic.mp3");
 loadSprite("lighting", "https://kaboomjs.com/sprites/lightening.png");
+loadSound("IntroMusic", "IntroMusic.mp3");
 
 
 // Letting the background Music run constantly, loop = true
-let music = play("backgroundMusic", { loop: true });
+//let music = play("backgroundMusic", { loop: true });
 
-// The patrol
+// The patrol section
 function patrol() {
     return {
         id: "patrol",
@@ -48,6 +49,67 @@ function patrol() {
         },
     };
 }
+// Opening Intro I came up with, 
+// Unfortionately I did not know how to program a opening intro the game,
+// so I asked AI how I could do that
+scene("intro", () => {
+    const introSong = play("IntroMusic", { loop: true, volume: 0.8 });
+    // A black background as my opening intro to the game! :) 
+    add([
+        rect(width(), height()),
+        color(0, 0, 0),
+        pos(0, 0),
+    ]);
+    // The title of the Game!
+wait(0.1, () => {
+    add([
+        text("Ghosty & the next Levels", {
+            size: 60,
+            width: 1000,
+        }),
+        pos(center().x, center().y - 100),
+        anchor("center"),
+    ]);
+});
+    // A short description of how to help Ghosty.
+wait(1, () => {
+    add([
+        text("Help Ghosty collect pineapples, avoid mushrooms and reach the portal!", {
+            size: 24,
+        }),
+        pos(center().x, center().y),
+        anchor("center"),
+    ]);
+});
+
+// I created a somewhat fade in text right on beat with the opening song,
+// to give it more a cool intro effect
+wait(1.8, () => {
+    const startText = add([
+        text("Press SPACE to Start", {
+            size: 28,
+        }),
+        pos(center().x, center().y + 120),
+        anchor("center"),
+        color(255, 242, 204),
+    ]);
+
+    // I asked AI to show me how to do a flashing effect when the,
+    // text says "press space to start"
+    loop(0.4, () => {
+        startText.hidden = !startText.hidden;
+    });
+});
+// Once the player presses the space bar, the game begins immediately 
+    onKeyPress("space", () => {
+        // I asked AI how I could stop a intro song so it wont continue forever in the actual game
+        introSong.stop();
+        play("backgroundMusic", { loop: true, volume: 0.8 });
+        // Goes to the main scene | starts from the beginning
+        go("main", { level: 0 });
+    });
+});
+
 
 
 // This is my main scene! 
@@ -94,12 +156,8 @@ scene("main", ({ level } = { level: 0 }) => {
             "==============================",
             "==============================",
             "==============================",
-            "==============================",
-            "==============================",
-            "==============================",
-            "==============================",
-            "==============================",
-            
+           
+                               
         ], 
         [
             "         $          ",
@@ -108,7 +166,9 @@ scene("main", ({ level } = { level: 0 }) => {
             "  $               $     D",
             "  =      =   ^   =  ",
             "    ^     $       ^   =",
-            "===============================",
+            "==============================",
+            "==============================",
+            "==============================",
         ],
         [
             "                         ",
@@ -116,8 +176,10 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =         =       ==    ",
             "         $             $  ",
             "   =    ^  =   ^   =      ",
-            "      ^      $        ^   ==",
-            "=================================",
+            "      ^      $       ^   ==",
+            "==============================",
+            "==============================",
+            "==============================",
         ],
         [
             "                  $    ",
@@ -126,7 +188,9 @@ scene("main", ({ level } = { level: 0 }) => {
             "                     ",
             "  =    ^  =  ^ =   =  ",
             " $               ^    = ",
-            "==================================",
+           "==============================",
+            "==============================",
+            "==============================",
         ],
         [
             "                      D ",
@@ -135,7 +199,10 @@ scene("main", ({ level } = { level: 0 }) => {
             "                  $     ",
             "  =    ^  =   ^   =    ",
             "         ^     ^         ^=",
-            "==================================",
+            "==============================",
+            "==============================",
+            "==============================",
+
         
         ]
     ];
@@ -149,6 +216,7 @@ scene("main", ({ level } = { level: 0 }) => {
         tiles: {
             " ": () => [],
             "=": () => [
+                // "=" means platform
                 rect(47, 47),
                 color(236, 226, 209),
                 outline(3, rgb(0, 0, 0)),
@@ -157,16 +225,19 @@ scene("main", ({ level } = { level: 0 }) => {
                 "platform",
                 
             ],
+            // $ = pineapple
             "$": () => [
                 sprite("pineapple"),
                 area(),
                 "pineapple",
             ],
+            // D = Door
             "D": () => [
                 sprite("portal"), 
                 area(),
                 "portal",
             ],
+            // "^" = the enemy (the mushroom)
             "^": () => [
                 sprite("enemy"),
                 area(),
@@ -179,7 +250,7 @@ scene("main", ({ level } = { level: 0 }) => {
 
     addLevel(LEVELS[currentLevel], levelConf);
 
-    // ScoreKeeper
+    // The ScoreKeeper
     let score = 0;
     const scoreLabel = add([
         text("pineapple: " + score),
@@ -209,7 +280,9 @@ scene("main", ({ level } = { level: 0 }) => {
     // Player collecting pineapples
     player.onCollide("pineapple", (pineapple) => {
         destroy(pineapple);
+        // Coin music will be played! :) 
         play("CoinMusic");
+        // Every single pineapple is worth 20 points each!
         score += 20;
         scoreLabel.text = "pineapple: " + score;
     });
@@ -227,6 +300,7 @@ loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
 
         // This will pixelated boom sound effect when the player jumps onto the mushroom
         add([
+            // boom sprite
             sprite("boom"),
             pos(enemy.pos),
             lifespan(0.5), 
@@ -239,6 +313,7 @@ loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
 
         // When the player dies, a lighting sprite will be shown to show that the player has died
         add([
+            // lighting sprite
             sprite("lighting"), 
             pos(enemy.pos),
             lifespan(2.4),
@@ -250,7 +325,7 @@ loadSprite("boom", "https://kaboomjs.com/sprites/kaboom.png");
     }
 });
 
-    // Door / portal sprite 
+    // Door | portal sprite included
 player.onCollide("portal", () => {
     const nextLevel = currentLevel + 1;
     if (nextLevel < LEVELS.length) {
@@ -263,13 +338,30 @@ player.onCollide("portal", () => {
 
 
 
-
 // The win & lose scene
 scene("win", () => {
-    play("VictoryMusic", { volume: 3 }); 
-    add([ text("Yippe, You Won :D !"), pos(center()), anchor("center") ]);
-    wait(3.4, () => { go("main", { level: 0 }); });
+    play("VictoryMusic", { volume: 3 });
 
+    // I also asked AI how I could make an outro with a backgroud
+    add([
+        rect(width(), height()),
+        color(0, 0, 0),
+        pos(0, 0),
+    ]);
+
+    // A text will appear below saying "Yippe, You won" once you reach the end of the game.
+    add([
+        text("Yippe, You Won :D !", {
+            size: 48,
+        }),
+        pos(center()),
+        anchor("center"),
+        color(255, 255, 255)
+    ]);
+
+    wait(3.4, () => {
+        go("main", { level: 0 });
+    });
 });
 scene("lose", () => {
     const mid = center(); 
@@ -280,6 +372,7 @@ scene("lose", () => {
         anchor("center"),
     ]);
     add([
+        // I asked AI how to size text and how to make the text be in the center more.
         text("(imagine losing lol)", { size: 24 }),
         pos(mid.x, mid.y + line1.height / 2 + 10), 
     
@@ -289,5 +382,5 @@ scene("lose", () => {
 
 
 
-// Starting the Game!
-go("main", { level: 0 });
+// Starting Ghosty & the next Levels game!
+go("intro");
