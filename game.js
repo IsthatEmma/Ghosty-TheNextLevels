@@ -63,7 +63,7 @@ scene("intro", () => {
     // The title of the Game!
 wait(0.1, () => {
     add([
-        text("Ghosty & the next Levels", {
+        text("Ghosty & the next Levels!🎃", {
             size: 60,
             width: 1000,
         }),
@@ -200,7 +200,7 @@ scene("main", ({ level } = { level: 0 }) => {
             "    =         =        ",
             "                  $     ",
             "  =    ^  =       =    ",
-            "         ^  =   ^   =  ^    ^  =",
+            "         ^  =   ^   =  ^  ^ = =",
             "==============================",
             "==============================",
             "==============================",
