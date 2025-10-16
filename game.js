@@ -3,7 +3,7 @@
 //Background on the game ! 
 kaboom({
     width: 1400,
-    height: 707,
+    height: 900,
     background: [234, 205, 159],
     
 });
