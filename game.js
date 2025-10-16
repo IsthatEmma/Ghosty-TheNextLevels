@@ -64,7 +64,20 @@ scene("intro", () => {
         rect(width(), height()),
         color(0, 0, 0),
         pos(0, 0),
-    ]);
+]);
+        add([
+        sprite("cloud"),
+        pos(80, 8),
+        scale(3),
+        "cloud"
+]);
+        add([
+        sprite("cloud"),
+        pos(1000, 8),
+        scale(3),
+        "cloud"
+
+]);
     // The title of the Game!
 wait(0.1, () => {
     add([
