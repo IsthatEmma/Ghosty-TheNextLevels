@@ -54,6 +54,11 @@ function patrol() {
 // so I asked AI how I could do that.
 scene("intro", () => {
     const introSong = play("IntroMusic", { loop: true, volume: 0.8 });
+    // I have also used AI's help to see how to cut off the intro music after the short song, 
+    // is done being played.
+    wait (4.2, ()=> {
+        introSong.stop();
+    });
     // A black background as my opening intro to the game! :) 
     add([
         rect(width(), height()),
