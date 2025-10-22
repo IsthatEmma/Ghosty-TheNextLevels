@@ -386,7 +386,11 @@ scene("win", () => {
 });
 scene("lose", () => {
     const mid = center(); 
-
+    add([
+        rect(width(), height()),
+        color(0, 0, 0),
+        pos(0, 0),
+    ]);
     const line1 = add([
         text("Game Over", { size: 48 }), 
         pos(mid),
