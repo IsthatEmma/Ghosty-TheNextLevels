@@ -78,8 +78,25 @@ scene("intro", () => {
         "cloud"
 
 ]);
-    // The title of the Game!
-wait(0.1, () => {
+    // The title of the Game! INTRO
+const bg = add([
+    rect(width(), height()),
+    pos(0, 0),
+    color(0, 0, 0), // start with black
+    "bg",
+]);
+
+// Loop every 2 seconds to toggle colors
+loop(1.5, () => {
+    if (bg.color.eq(rgb(0, 0, 0))) {
+        bg.color = rgb(244, 67, 54); 
+    } else {
+        bg.color = rgb(0, 0, 0);
+    }
+});
+
+
+wait(1, () => {
     add([
         text("Ghosty & the next Levels!🎃", {
             size: 60,
@@ -90,7 +107,7 @@ wait(0.1, () => {
     ]);
 });
     // A short description of how to help Ghosty!
-wait(1, () => {
+wait(2, () => {
     add([
         text("Help Ghosty collect pineapples, avoid mushrooms and reach the portal!", {
             size: 24,
@@ -102,7 +119,7 @@ wait(1, () => {
 
 // I created a somewhat fade in text right on beat with the opening song,
 // to give it more a cool intro effect, the song should be on beat though
-wait(1.8, () => {
+wait(2.9, () => {
     const startText = add([
         text("Press SPACE to Start", {
             size: 28,
